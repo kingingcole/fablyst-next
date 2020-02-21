@@ -3,64 +3,97 @@ import {Dropdown, Container, CartDetails, Table, Thead, HeadTRow, ProductHeading
 import CartSummary from '../../components/organisms/CartSummaryColumn'
 import React from "react";
 
-export default () => {
+import withData from '../../lib/apollo'
+import gql from "graphql-tag";
+import { useQuery } from "@apollo/react-hooks";
 
-    const sampleData = {
-        image: 'https://via.placeholder.com/40',
-        title: 'Lorem Ipsum Doler Amet',
-        color: 'Navy',
-        size: 42,
-        price: 43.67,
-        quantityAvailable: 4,
-        category: 'women'
+
+const FETCH_CART_ITEMS = gql`
+  query fetchCartItems {
+    cartItems @client {
+        variantId
+        quantity
+        title
+        category
+        price
+        image
+    }
+  }
+`;
+
+const Cart = () => {
+
+    const {data, error, loading} = useQuery(FETCH_CART_ITEMS);
+
+    data && console.log(data);
+    error && console.log(error);
+
+    const calculateSubTotal = () => {
+      let subTotal = 0;
+      if (data.cartItems.length >= 1){
+          let {cartItems} = data;
+          cartItems.map(item => subTotal = subTotal + (item.price * item.quantity))
+          return subTotal
+      }
+      return subTotal
     };
 
-    const data = new Array(4).fill(sampleData);
+
     return (
         <Layout>
             <Container>
-                <CartDetails>
-                    <Table>
-                        <Thead>
-                        <HeadTRow>
-                            <ProductHeading>PRODUCT</ProductHeading>
-                                <Td>PRICE</Td>
-                                <Td>QUANTITY</Td>
-                                <Td>TOTAL</Td>
-                        </HeadTRow>
-                        </Thead>
-                        <tbody>
-                        {data && data.map(d => {
+                {loading && <p style={{textAlign: 'center', width:'100%'}}>Loading cart...</p>}
+                {error && <p style={{textAlign: 'center', width:'100%'}}>An error occured. Please try again</p>}
+                {data.cartItems.length < 1 && <p style={{textAlign: 'center', width:'100%', margin: '10px 0'}}>You have no item in cart</p>}
+                {
+                    data && data.cartItems.length >= 1 &&
+                    <>
+                        <CartDetails>
+                            <Table>
+                                <Thead>
+                                <HeadTRow>
+                                    <ProductHeading>PRODUCT</ProductHeading>
+                                    <Td>PRICE</Td>
+                                    <Td>QUANTITY</Td>
+                                    <Td>TOTAL</Td>
+                                </HeadTRow>
+                                </Thead>
+                                <tbody>
+                                {data.cartItems.map(d => {
 
-                            const options = [];
-                            for (let i = 1; i <= d.quantityAvailable; i++){
-                                options.push(<option value={i}>{i}</option>)
-                            }
-                           return (
-                               <TRow key={Math.random()}>
-                                   <ItemDetails>
-                                       <RemoveButton>X</RemoveButton>
-                                       <Image src={d.image}/>
-                                       <div>
-                                           <ProductCategory>{d.category}</ProductCategory>
-                                           <ProductTitle>{d.title}</ProductTitle>
-                                       </div>
-                                   </ItemDetails>
-                                   <Td>{d.price}</Td>
-                                   <Td>
-                                       <Dropdown>
-                                           {options}
-                                       </Dropdown>
-                                   </Td>
-                                   <Td>{d.price}</Td>
-                               </TRow>
-                           )
-                        })}
-                        </tbody>
-                    </Table>
-                </CartDetails>
-                <CartSummary/>
+                                    const options = [];
+                                    for (let i = 1; i <= 10 ; i++){
+                                        options.push(<option value={i}>{i}</option>)
+                                    }
+                                    return (
+                                        <TRow key={Math.random()}>
+                                            <ItemDetails>
+                                                <RemoveButton>X</RemoveButton>
+                                                <Image src={d.image}/>
+                                                <div>
+                                                    <ProductCategory>{d.category}</ProductCategory>
+                                                    <ProductTitle>{d.title}</ProductTitle>
+                                                </div>
+                                            </ItemDetails>
+                                            <Td>{d.price}</Td>
+                                            <Td>
+                                                <Dropdown defaultValue={d.quantity}>
+                                                    {options}
+                                                </Dropdown>
+                                            </Td>
+                                            <Td>{ d.price * d.quantity}</Td>
+                                        </TRow>
+                                    )
+                                })}
+                                </tbody>
+                            </Table>
+                        </CartDetails>
+                        <CartSummary subTotal={calculateSubTotal()}/>
+                    </>
+                }
             </Container>
         </Layout>
     )
-}
+};
+
+export default withData(Cart)

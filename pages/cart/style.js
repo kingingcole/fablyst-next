@@ -88,7 +88,12 @@ export const Image = styled.img`
 export const ProductCategory = styled.small`
     text-transform: uppercase;
     font-size: 11px;
-    color: #9B9B9B
+    color: #9B9B9B;
+    
+    @media (max-width: ${THIRD_BREAKPOINT}){
+        font-size: 9px;
+    };
+\`;
 `;
 
 export const ProductTitle = styled.p`
@@ -101,6 +106,11 @@ export const ProductTitle = styled.p`
         margin: 0;
         margin-right: 10px
     };
+    
+    @media (max-width: ${THIRD_BREAKPOINT}){
+        font-size: 12.3px;
+    };
+\`;
 `;
 
 export const RemoveButton = styled.p`

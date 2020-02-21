@@ -38,6 +38,9 @@ const GET_PRODUCT = gql`
               availableForSale
               compareAtPrice
               price
+              image {
+                transformedSrc(maxWidth: 100, maxHeight: 100)
+              }
               selectedOptions {
                 name
                 value

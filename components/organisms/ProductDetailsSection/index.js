@@ -1,4 +1,7 @@
 import React, {useState, useEffect} from 'react';
+import { useMutation } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
+import withData from '../../../lib/apollo'
 
 var _ = require('lodash');
 import {
@@ -20,6 +23,14 @@ import ArrowDown from '../../../assets/arrow-down.svg'
 
 
 const customStyle = {display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap'};
+
+const ADD_TO_CART = gql`
+  mutation AddToCart($variantId: Str!, $quantity: Int!, $title: Str!, $category: Str!, $price: Int!, $image: Str!) {
+    addToCart(variantId: $variantId, quantity: $quantity, title: $title, category: $category, price: $price, image: $image) @client {
+        variantId
+    }
+  }
+`;
 
 
 const ProductDetailsSection = ({product}) => {
@@ -78,6 +89,8 @@ const ProductDetailsSection = ({product}) => {
 
     const selectedVariant = _.find(variants, ['node.selectedOptions', selectedOptions]).node;
 
+    const [quantity, setQuantity] = useState(1);
+
     let options = [];
     if (selectedVariant.availableForSale) {
         for (let i = 1; i <= 10; i++) {
@@ -85,7 +98,30 @@ const ProductDetailsSection = ({product}) => {
         }
     } else options = <option value="0">0</option>
 
-    const {currencyCode} = product.priceRange.minVariantPrice
+    const {currencyCode} = product.priceRange.minVariantPrice;
+
+
+    //ADD TO CART
+    const [add_to_cart, { data }] = useMutation(ADD_TO_CART);
+
+    const addToCart = () => {
+        const { id, image, price } = selectedVariant;
+        const { title, productType } = product;
+
+        //declare variables for mutation
+        const variables = {
+            variantId: id,
+            image: image.transformedSrc,
+            price,
+            quantity,
+            title,
+            productType,
+            category: productType
+        };
+
+        //call addToCart mutate function
+        add_to_cart({ variables });
+    };
 
 
     return (
@@ -134,11 +170,16 @@ const ProductDetailsSection = ({product}) => {
                 <Detail>
                     <Label>Quantity:</Label>
                     <div style={{customStyle}}>
-                        <Dropdown>
+                        <Dropdown
+                            defaultValue={quantity}
+                            onChange={e => setQuantity(Number(e.target.value))}
+                            disabled={!selectedVariant.availableForSale}>
                             {options}
                         </Dropdown>
-                        <AddToCartButton disabled={!selectedVariant.availableForSale}
-                                         availableForSale={selectedVariant.availableForSale}>
+                        <AddToCartButton
+                            onClick={addToCart}
+                            disabled={!selectedVariant.availableForSale}
+                            availableForSale={selectedVariant.availableForSale}>
                             {selectedVariant.availableForSale && <Basket style={{height: '20px', marginRight: '5px'}}/>}
                             {selectedVariant.availableForSale ? 'Add to cart' : 'Out of stock'}
                         </AddToCartButton>
@@ -156,4 +197,4 @@ const ProductDetailsSection = ({product}) => {
     )
 };
 
-export default ProductDetailsSection
+export default withData(ProductDetailsSection)

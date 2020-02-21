@@ -1,6 +1,10 @@
 import {Container, Heading, Input, PromoCodeForm, Button, Label, CartPriceSection, PriceInfo, PriceText, Price, TotalPriceText, TotalPrice} from './style'
 
-const CartSummary = () => {
+const CartSummary = ({subTotal}) => {
+    let shippingPrice = 0;
+    let discount = 0;
+    let total = (subTotal + shippingPrice) - discount;
+
     return (
         <Container>
             <Heading>summary</Heading>
@@ -12,7 +16,7 @@ const CartSummary = () => {
             <CartPriceSection>
                 <PriceInfo>
                     <PriceText>Cart Subtotal:</PriceText>
-                    <Price>$30.88</Price>
+                    <Price>{subTotal}</Price>
                 </PriceInfo>
                 <PriceInfo>
                     <PriceText>Shipping and handling:</PriceText>
@@ -24,7 +28,7 @@ const CartSummary = () => {
                 </PriceInfo>
                 <PriceInfo>
                     <TotalPriceText>Cart Total:</TotalPriceText>
-                    <TotalPrice>$30.88</TotalPrice>
+                    <TotalPrice>{total}</TotalPrice>
                 </PriceInfo>
             </CartPriceSection>
             <Button width='100%' background="#DF0052" color="white" borderColor='#DF0052' hoverBackground="#c11755" hoverBorderColor='#c11755'>CHECKOUT</Button>
