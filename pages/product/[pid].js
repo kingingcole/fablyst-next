@@ -22,6 +22,7 @@ const GET_PRODUCT = gql`
           }
         }
         title
+        descriptionHtml
         handle
         productType
         collections(first: 1) {

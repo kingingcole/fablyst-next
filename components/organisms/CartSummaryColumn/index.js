@@ -62,7 +62,7 @@ const CartSummary = ({subTotal, products}) => {
             <CartPriceSection>
                 <PriceInfo>
                     <PriceText>Cart Subtotal:</PriceText>
-                    <Price>{subTotal}</Price>
+                    <Price>{subTotal.toFixed(2)}</Price>
                 </PriceInfo>
                 <PriceInfo>
                     <PriceText>Shipping and handling:</PriceText>
@@ -74,7 +74,7 @@ const CartSummary = ({subTotal, products}) => {
                 </PriceInfo>
                 <PriceInfo>
                     <TotalPriceText>Cart Total:</TotalPriceText>
-                    <TotalPrice>{total}</TotalPrice>
+                    <TotalPrice>{total.toFixed(2)}</TotalPrice>
                 </PriceInfo>
             </CartPriceSection>
             <Button onClick={() => createCheckout()} width='100%' background="#DF0052" color="white" borderColor='#DF0052' hoverBackground="#c11755" hoverBorderColor='#c11755'>CHECKOUT</Button>
