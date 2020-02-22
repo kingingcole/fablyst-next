@@ -1,11 +1,12 @@
 import Layout from '../../components/Layout'
 import {Dropdown, Container, CartDetails, Table, Thead, HeadTRow, ProductHeading, Td, TRow, ItemDetails, Image, ProductTitle, ProductCategory, RemoveButton} from './style'
 import CartSummary from '../../components/organisms/CartSummaryColumn'
-import React from "react";
+import React, {useState} from "react";
+import RemoveIcon from '../../assets/icn_delete.svg'
 
 import withData from '../../lib/apollo'
 import gql from "graphql-tag";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 
 
 const FETCH_CART_ITEMS = gql`
@@ -21,9 +22,19 @@ const FETCH_CART_ITEMS = gql`
   }
 `;
 
+const REMOVE_ITEM_FROM_CART = gql`
+    mutation removeItemFromCart($variantId: Str!) {
+        removeCartItem(variantId: $variantId) @client {
+            variantId
+        }
+    }
+`;
+
+
 const Cart = () => {
 
     const {data, error, loading} = useQuery(FETCH_CART_ITEMS);
+    const [removeFromCart] = useMutation(REMOVE_ITEM_FROM_CART, {refetchQueries:['fetchCartItems']});
 
     data && console.log(data);
     error && console.log(error);
@@ -37,6 +48,7 @@ const Cart = () => {
       }
       return subTotal
     };
+
 
 
     return (
@@ -63,12 +75,13 @@ const Cart = () => {
 
                                     const options = [];
                                     for (let i = 1; i <= 10 ; i++){
-                                        options.push(<option value={i}>{i}</option>)
+                                        options.push(<option value={i} key={i}>{i}</option>)
                                     }
+                                    const [quantity, setQuantity] = useState(d.quantity);
                                     return (
                                         <TRow key={Math.random()}>
                                             <ItemDetails>
-                                                <RemoveButton>X</RemoveButton>
+                                                <RemoveButton onClick={() => removeFromCart({ variables: {variantId: d.variantId} })}><RemoveIcon/></RemoveButton>
                                                 <Image src={d.image}/>
                                                 <div>
                                                     <ProductCategory>{d.category}</ProductCategory>
@@ -77,18 +90,16 @@ const Cart = () => {
                                             </ItemDetails>
                                             <Td>{d.price}</Td>
                                             <Td>
-                                                <Dropdown defaultValue={d.quantity}>
-                                                    {options}
-                                                </Dropdown>
+                                                {d.quantity}
                                             </Td>
-                                            <Td>{ d.price * d.quantity}</Td>
+                                            <Td>{(d.price * quantity).toFixed(2)}</Td>
                                         </TRow>
                                     )
                                 })}
                                 </tbody>
                             </Table>
                         </CartDetails>
-                        <CartSummary subTotal={calculateSubTotal()}/>
+                        <CartSummary products={data.cartItems} subTotal={calculateSubTotal()}/>
                     </>
                 }
             </Container>

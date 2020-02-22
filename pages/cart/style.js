@@ -85,10 +85,11 @@ export const Image = styled.img`
 
 `;
 
-export const ProductCategory = styled.small`
+export const ProductCategory = styled.p`
     text-transform: uppercase;
     font-size: 11px;
     color: #9B9B9B;
+    line-height: 1em;
     
     @media (max-width: ${THIRD_BREAKPOINT}){
         font-size: 9px;
