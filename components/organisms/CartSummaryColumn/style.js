@@ -76,7 +76,6 @@ export const Button = styled.button`
 
 export const CartPriceSection = styled.div`
     height: auto;
-    border-top: 1px solid #E9E9E9;
     border-bottom: 1px solid #E9E9E9;
     padding: 15px 10px;
     max-width: 300px;

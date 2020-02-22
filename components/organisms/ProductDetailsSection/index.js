@@ -25,8 +25,8 @@ import ArrowDown from '../../../assets/arrow-down.svg'
 const customStyle = {display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap'};
 
 const ADD_TO_CART = gql`
-  mutation AddToCart($variantId: Str!, $quantity: Int!, $title: Str!, $category: Str!, $price: Int!, $image: Str!) {
-    addToCart(variantId: $variantId, quantity: $quantity, title: $title, category: $category, price: $price, image: $image) @client {
+  mutation AddToCart($variantId: Str!, $quantity: Int!, $title: Str!, $category: Str!, $price: Int!, $image: Str!, $handle: Str!) {
+    addToCart(variantId: $variantId, quantity: $quantity, title: $title, category: $category, price: $price, image: $image, handle: $handle) @client {
         variantId
     }
   }
@@ -106,7 +106,7 @@ const ProductDetailsSection = ({product}) => {
 
     const addToCart = () => {
         const { id, image, price } = selectedVariant;
-        const { title, productType } = product;
+        const { title, productType, handle } = product;
 
         //declare variables for mutation
         const variables = {
@@ -116,7 +116,8 @@ const ProductDetailsSection = ({product}) => {
             quantity,
             title,
             productType,
-            category: productType
+            category: productType,
+            handle
         };
 
         //call addToCart mutate function

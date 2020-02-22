@@ -3,6 +3,7 @@ import {Dropdown, Container, CartDetails, Table, Thead, HeadTRow, ProductHeading
 import CartSummary from '../../components/organisms/CartSummaryColumn'
 import React, {useState} from "react";
 import RemoveIcon from '../../assets/icn_delete.svg'
+import Link from '../../components/atoms/Link'
 
 import withData from '../../lib/apollo'
 import gql from "graphql-tag";
@@ -18,6 +19,7 @@ const FETCH_CART_ITEMS = gql`
         category
         price
         image
+        handle
     }
   }
 `;
@@ -85,7 +87,7 @@ const Cart = () => {
                                                 <Image src={d.image}/>
                                                 <div>
                                                     <ProductCategory>{d.category}</ProductCategory>
-                                                    <ProductTitle>{d.title}</ProductTitle>
+                                                    <Link href={`/product/[pid]`} as={`/product/${d.handle}`}><ProductTitle>{d.title}</ProductTitle></Link>
                                                 </div>
                                             </ItemDetails>
                                             <Td>{d.price}</Td>

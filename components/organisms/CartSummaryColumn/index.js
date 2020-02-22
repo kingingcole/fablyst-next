@@ -54,11 +54,11 @@ const CartSummary = ({subTotal, products}) => {
     return (
         <Container>
             <Heading>summary</Heading>
-            <Label htmlFor="promo-code">Do you have a promo code?</Label>
-            <PromoCodeForm>
-                <Input required type="text" id="promo-code"/>
-                <Button width={`50%`} background="white" color="black" borderColor='black'>APPLY</Button>
-            </PromoCodeForm>
+            {/*<Label htmlFor="promo-code">Do you have a promo code?</Label>*/}
+            {/*<PromoCodeForm>*/}
+                {/*<Input required type="text" id="promo-code"/>*/}
+                {/*<Button width={`50%`} background="white" color="black" borderColor='black'>APPLY</Button>*/}
+            {/*</PromoCodeForm>*/}
             <CartPriceSection>
                 <PriceInfo>
                     <PriceText>Cart Subtotal:</PriceText>
