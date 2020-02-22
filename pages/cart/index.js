@@ -35,7 +35,6 @@ const Cart = () => {
 
     const {data, error, loading} = useQuery(FETCH_CART_ITEMS);
     const [removeFromCart] = useMutation(REMOVE_ITEM_FROM_CART, {refetchQueries:[FETCH_CART_ITEMS]});
-    const [cartItems, setCartItems] = useState()
 
     // data && console.log(data);
     // error && console.log(error);

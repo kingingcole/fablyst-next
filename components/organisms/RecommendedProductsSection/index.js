@@ -30,7 +30,7 @@ const GET_RECOMMENDED_PRODUCTS = gql`
               images(first: 1) {
                 edges {
                   node {
-                    transformedSrc(maxWidth: 500, maxHeight: 300, preferredContentType: PNG)
+                    transformedSrc(maxWidth: 500, maxHeight: 400, preferredContentType: PNG)
                     altText
                   }
                 }

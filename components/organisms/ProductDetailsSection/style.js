@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import {ReactComponent as Basket} from '../../../assets/basket.svg'
-import {FIRST_BREAKPOINT, THIRD_BREAKPOINT} from "../../../constants";
+import {FIRST_BREAKPOINT, THIRD_BREAKPOINT, SECOND_BREAKPOINT} from "../../../constants";
 
 export const Container = styled.section`
     display: flex;
@@ -174,6 +174,10 @@ export const Image = styled.img`
     
     @media (max-width: ${THIRD_BREAKPOINT}) {
         height: 450px;
+    };
+    
+    @media (max-width: ${SECOND_BREAKPOINT}) {
+        height: 600px;
     };
 `;
 
