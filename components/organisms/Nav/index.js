@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {NavBar, TopNav, BottomNav, NavLink, SaleLink, BagLogo} from './style'
+import {NavBar, TopNav, BottomNav, NavLink, SaleLink, BagLogo, CartBadge, CartIconWrapper} from './style'
 import Search from './search'
 import styled from 'styled-components'
 import {THIRD_BREAKPOINT} from "../../../constants";
@@ -16,6 +16,20 @@ const IS_LOGGED_IN = gql`
   }
 `;
 
+const FETCH_CART_ITEMS = gql`
+  query fetchCartItems {
+    cartItems @client {
+        variantId
+        quantity
+        title
+        category
+        price
+        image
+        handle
+    }
+  }
+`;
+
 const AuthLink = () => {
     const { data } = useQuery(IS_LOGGED_IN);
     return data.isLoggedIn ? (
@@ -24,6 +38,20 @@ const AuthLink = () => {
         <NavLink href={'/auth'}>Sign in/Sign up</NavLink>
     );
 };
+
+
+const CartIcon = () => {
+    const { data } = useQuery(FETCH_CART_ITEMS);
+    const l = data.cartItems.length
+
+    return (
+        <CartIconWrapper>
+            <BagLogo style={{marginLeft: '10px'}}/>
+            <CartBadge>{l}</CartBadge>
+        </CartIconWrapper>
+    )
+}
+
 
 const Navbar = () => {
 
@@ -47,7 +75,7 @@ const Navbar = () => {
                 <Search/>
                 <Misc>
                     <AuthLink/>
-                    <Link href="/cart"><BagLogo style={{marginLeft: '10px'}}/></Link>
+                    <Link href="/cart"><CartIcon /></Link>
                 </Misc>
                 <MenuButton onClick={handleMenuOpen}>
                     <FeatherIcon icon={icon}

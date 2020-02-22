@@ -21,7 +21,6 @@ export default Search
 const SearchInputContainer = styled.div`
     width: 60%;
     display: flex;
-    background: red;
     
     @media (max-width: ${FIRST_BREAKPOINT}) {
         width: 50%;

@@ -80,8 +80,27 @@ export const SaleLink = styled(NavLink)`
 
 export const BagLogo = styled(bagLogo)`
     height: auto;
-    width: 15px;
+    width: 19px;
 `;
 
+export const CartIconWrapper = styled.div`
+    display: flex;
+    margin: 0;
+`;
 
+export const CartBadge = styled.div`
+    width: 15px;
+    height: 15px;
+    margin: 0;
+    font-size: 9px;
+    box-sizing: border-box;
+    background: #DF0052;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    position: relative;
+    left: -10px
+`;
 
